@@ -43,8 +43,8 @@ footer{color:var(--mut);font-size:.8rem;text-align:center}
 
 <div class="card">
   <div class="row">
-    <div><label for="fgT">Цвет текста</label><div class="in"><input type="color" id="fgC"><input type="text" id="fgT" maxlength="7" spellcheck="false"></div></div>
-    <div><label for="bgT">Цвет фона</label><div class="in"><input type="color" id="bgC"><input type="text" id="bgT" maxlength="7" spellcheck="false"></div></div>
+    <div><label for="fgT">Цвет текста</label><div class="in"><input type="color" id="fgC" aria-label="Выбрать цвет текста палитрой"><input type="text" id="fgT" maxlength="7" spellcheck="false"></div></div>
+    <div><label for="bgT">Цвет фона</label><div class="in"><input type="color" id="bgC" aria-label="Выбрать цвет фона палитрой"><input type="text" id="bgT" maxlength="7" spellcheck="false"></div></div>
   </div>
   <p style="margin:12px 0 0"><button id="swap" type="button">⇄ Поменять местами</button></p>
 </div>
@@ -105,9 +105,14 @@ $('fgC').addEventListener('input',e=>{$('fgT').value=e.target.value;update()});
 $('bgC').addEventListener('input',e=>{$('bgT').value=e.target.value;update()});
 $('swap').onclick=()=>{[$('fgT').value,$('bgT').value]=[$('bgT').value,$('fgT').value];update()};
 $('apply').onclick=()=>{if(sug){$('fgT').value=hex(sug);update()}};
-const m=location.hash.match(/^#([0-9a-f]{6})-([0-9a-f]{6})$/i);
-$('fgT').value=m?'#'+m[1]:'#767676';$('bgT').value=m?'#'+m[2]:'#ffffff';
-update();
+// Цвета берутся из хэша при загрузке и при его изменении (вставили другую ссылку в той же вкладке)
+function fromHash(){
+  const m=location.hash.match(/^#([0-9a-f]{6})-([0-9a-f]{6})$/i);
+  $('fgT').value=m?'#'+m[1]:'#767676';$('bgT').value=m?'#'+m[2]:'#ffffff';
+  update();
+}
+window.addEventListener('hashchange',fromHash);
+fromHash();
 </script>
 </body>
 </html>
